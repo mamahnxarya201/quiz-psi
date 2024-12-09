@@ -30,7 +30,7 @@
                         <td><?= htmlspecialchars($person->noTelp, ENT_QUOTES, 'UTF-8') ?></td>
                         <td><button class="view-button" onclick="navigateToViewForm(<?= $person->id ?>)">View</button></td>
                         <td><button class="update-button" onclick="navigateToEditForm(<?= $person->id ?>)">Update</button></td>
-                        <td><button class="delete-button">Delete</button></td>
+                        <td><button class="delete-button" onClick="deleteData(<?= $person->id ?>)">Delete</button></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -41,6 +41,20 @@
         let navigateToAddForm = () => window.location.href='/form/add';
         let navigateToEditForm = (id) => window.location.href='/form/edit?id=' + id;
         let navigateToViewForm = (id) => window.location.href='/form/view?id=' + id;
+        function deleteData(id) {
+            fetch('/api/person/delete?id=' + id, {
+                method: 'GET',
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href='/'
+                } else {
+                    alert('Failed to submit form');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Failed to submit form');
+            });
+        }
     </script>
 </body>
 

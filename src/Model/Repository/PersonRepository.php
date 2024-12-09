@@ -98,4 +98,16 @@ class PersonRepository
             throw new Exception("Error: " . $stmt->errorInfo()[2]);
         }
     }
+
+    public function deletePerson(int $id): void
+    {
+
+        $sql = "DELETE FROM person WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Error: " . $stmt->errorInfo()[2]);
+        }
+    }
 }

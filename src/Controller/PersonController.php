@@ -43,9 +43,20 @@ class PersonController
         }
     }
 
-    public function deletePerson(array $request): void
+    public function deletePerson(): void
     {
+        $personRepository = new PersonRepository(ConnectionPDO::connect());
 
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $personRepository->deletePerson(intval($_GET['id']));
+
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => 'Person added successfully']);
+            exit;
+        } else {
+            header('HTTP/1.1 405 Method Not Allowed');
+            echo "Method Not Allowed";
+        }
     }
 
     private function formatPersonRequest(?bool $isEdit = false): Person

@@ -14,4 +14,5 @@ use Controller\PageController;
 
     ->add('POST', '/api/person/add', [PersonController::class, 'addPerson'])
     ->add('POST', '/api/person/update', [PersonController::class, 'updatePerson'])
+    ->add('GET','/api/person/delete', [PersonController::class, 'deletePerson'])
     ->run();

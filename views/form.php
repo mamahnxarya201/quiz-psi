@@ -66,29 +66,47 @@
     </div>
 
     <script>
-       function submitForm() {
-        const form = document.getElementById('personForm');
-        const formData = new FormData(form);
-        const fileInput = document.getElementById('foto');
-        const file = fileInput.files[0];
+        function submitForm() {
+            const form = document.getElementById('personForm');
+            const formData = new FormData(form);
+            const fileInput = document.getElementById('foto');
+            const file = fileInput.files[0];
 
-        const titleText = "<?= $titleText ?>";
-        let endpoint = '/api/person/add';
-        if (titleText === 'Merubah') {
-            endpoint = '/api/person/update';
-        }
+            const titleText = "<?= $titleText ?>";
+            let endpoint = '/api/person/add';
+            if (titleText === 'Merubah') {
+                endpoint = '/api/person/update';
+            }
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                const base64String = reader.result.split(',')[1];
-                formData.append('foto_base64', base64String);
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const base64String = reader.result.split(',')[1];
+                    formData.append('foto_base64', base64String);
 
+                    fetch(endpoint, {
+                        method: 'POST',
+                        body: formData
+                    }).then(response => {
+                        if (response.ok) {
+                            window.location.href = '/'
+                            console.log("Form submitted successfully!");
+                        } else {
+                            alert('Failed to submit form');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to submit form');
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
                 fetch(endpoint, {
                     method: 'POST',
                     body: formData
                 }).then(response => {
                     if (response.ok) {
+                        window.location.href = '/'
                         console.log("Form submitted successfully!");
                     } else {
                         alert('Failed to submit form');
@@ -97,24 +115,8 @@
                     console.error('Error:', error);
                     alert('Failed to submit form');
                 });
-            };
-            reader.readAsDataURL(file);
-        } else {
-            fetch(endpoint, {
-                method: 'POST',
-                body: formData
-            }).then(response => {
-                if (response.ok) {
-                    console.log("Form submitted successfully!");
-                } else {
-                    alert('Failed to submit form');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('Failed to submit form');
-            });
+            }
         }
-    }
     </script>
 </body>
 
