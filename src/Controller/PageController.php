@@ -22,7 +22,7 @@ class PageController
         }
         $titleText = 'Melihat';
         $action = 'view';
-        $person = (new PersonRepository(ConnectionPDO::connect()))->getById($_GET['id']);
+        $person = (new PersonRepository(ConnectionPDO::connect()))->getById(intval($_GET['id']));
 
         require 'views/form.php';
     }
@@ -35,7 +35,7 @@ class PageController
         }
         $titleText = 'Merubah';
         $action = 'edit';
-        $person = (new PersonRepository(ConnectionPDO::connect()))->getById($_GET['id']);
+        $person = (new PersonRepository(ConnectionPDO::connect()))->getById(intval($_GET['id']));
 
         require 'views/form.php';
     }
@@ -44,7 +44,7 @@ class PageController
     {
         $titleText = 'Menambah';
         $action = 'add';
-        
+
         require 'views/form.php';
     }
 }

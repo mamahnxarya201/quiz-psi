@@ -51,6 +51,7 @@
                     <input class="form-control" type="file" id="foto" name="foto">
                 </div>
                 <img class="img-fluid" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
+                <input type="hidden" name="id" value="<?= $person ? $person->id : '' ?>">
             </fieldset>
             <div class="row">
                 <div class="col">
@@ -60,19 +61,51 @@
                     <button type="button" class="submit-button <?= $action === 'view' ? 'hidden' : '' ?>" onclick="submitForm()">Submit</button>
                 </div>
             </div>
+
         </form>
     </div>
 
     <script>
-        function submitForm() {
-            const form = document.getElementById('personForm');
-            const formData = new FormData(form);
-            fetch('PersonController.php', {
+       function submitForm() {
+        const form = document.getElementById('personForm');
+        const formData = new FormData(form);
+        const fileInput = document.getElementById('foto');
+        const file = fileInput.files[0];
+
+        const titleText = "<?= $titleText ?>";
+        let endpoint = '/api/person/add';
+        if (titleText === 'Merubah') {
+            endpoint = '/api/person/update';
+        }
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                const base64String = reader.result.split(',')[1];
+                formData.append('foto_base64', base64String);
+
+                fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                }).then(response => {
+                    if (response.ok) {
+                        console.log("Form submitted successfully!");
+                    } else {
+                        alert('Failed to submit form');
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit form');
+                });
+            };
+            reader.readAsDataURL(file);
+        } else {
+            fetch(endpoint, {
                 method: 'POST',
                 body: formData
             }).then(response => {
                 if (response.ok) {
-                    window.location.href = '/';
+                    console.log("Form submitted successfully!");
                 } else {
                     alert('Failed to submit form');
                 }
@@ -81,6 +114,7 @@
                 alert('Failed to submit form');
             });
         }
+    }
     </script>
 </body>
 
