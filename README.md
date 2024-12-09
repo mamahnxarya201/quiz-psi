@@ -1,4 +1,4 @@
-written using mvc in mind
-all codes live inside src
-no framework, no composer 
+written using mvc in mind <br>
+all codes live inside src <br>
+no framework, no composer <br>
 autoloader, router written by hand
