@@ -7,7 +7,7 @@ use Exception;
 
 class RouteController
 {
-    private $routes = [];
+    private array $routes = [];
 
     public function add($method, $path, $callback)
     {
@@ -54,5 +54,10 @@ class RouteController
 
         header("HTTP/1.0 404 Not Found");
         echo "404 Not Found";
+    }
+
+    private function formatRequest()
+    {
+
     }
 }

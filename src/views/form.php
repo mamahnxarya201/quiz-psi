@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melihat Data Contact Person</title>
-    <link rel="stylesheet" href="/views/css/form.css">
+    <link rel="stylesheet" href="css/form.css">
 </head>
 
 <body>
@@ -55,7 +55,7 @@
             </fieldset>
             <div class="row">
                 <div class="col">
-                    <button type="button" class="back-button">Back</button>
+                    <button type="button" class="back-button" onclick="navigateToHome()">Back</button>
                 </div>
                 <div class="col">
                     <button type="button" class="submit-button <?= $action === 'view' ? 'hidden' : '' ?>" onclick="submitForm()">Submit</button>
@@ -66,6 +66,8 @@
     </div>
 
     <script>
+        let navigateToHome = () => window.location.href='/';
+
         function submitForm() {
             const form = document.getElementById('personForm');
             const formData = new FormData(form);
@@ -89,7 +91,7 @@
                         body: formData
                     }).then(response => {
                         if (response.ok) {
-                            window.location.href = '/'
+                            // window.location.href = '/'
                             console.log("Form submitted successfully!");
                         } else {
                             alert('Failed to submit form');
@@ -106,7 +108,7 @@
                     body: formData
                 }).then(response => {
                     if (response.ok) {
-                        window.location.href = '/'
+                        // window.location.href = '/'
                         console.log("Form submitted successfully!");
                     } else {
                         alert('Failed to submit form');

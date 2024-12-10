@@ -5,13 +5,17 @@ namespace Controller;
 
 use Database\ConnectionPDO;
 use Model\Repository\PersonRepository;
+use Router\Attributes\GET;
+use Router\Attributes\Prefix;
 
+#[Prefix('/views')]
 class PageController
 {
+    #[GET('/home')]
     public function homeController(): void
     {
         $personCollection = (new PersonRepository(ConnectionPDO::connect()))->getAll();
-        require 'views/home.php';
+        require 'src/views/home.php';
     }
 
     public function formViewDataController(): void
@@ -24,7 +28,7 @@ class PageController
         $action = 'view';
         $person = (new PersonRepository(ConnectionPDO::connect()))->getById(intval($_GET['id']));
 
-        require 'views/form.php';
+        require 'src/views/form.php';
     }
 
     public function formEditDataController(): void
@@ -37,7 +41,7 @@ class PageController
         $action = 'edit';
         $person = (new PersonRepository(ConnectionPDO::connect()))->getById(intval($_GET['id']));
 
-        require 'views/form.php';
+        require 'src/views/form.php';
     }
 
     public function formAddDataController(): void
@@ -45,6 +49,6 @@ class PageController
         $titleText = 'Menambah';
         $action = 'add';
 
-        require 'views/form.php';
+        require 'src/views/form.php';
     }
 }
