@@ -4,5 +4,5 @@
 // and router for handling routing (no directory based routing)
 // no need for composer or framework :-)
 require_once 'autoload.php';
-require_once 'routesv2.php';  
+require_once 'routes.php';
 

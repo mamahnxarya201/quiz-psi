@@ -6,9 +6,14 @@ namespace Controller;
 use Database\ConnectionPDO;
 use Model\Person;
 use Model\Repository\PersonRepository;
+use Router\Attributes\GET;
+use Router\Attributes\POST;
+use Router\Attributes\Prefix;
 
+#[Prefix('/api/person')]
 class PersonController
 {
+    #[POST('/update')]
     public function updatePerson(): void
     {
         $personRepository = new PersonRepository(ConnectionPDO::connect());
@@ -26,6 +31,7 @@ class PersonController
         }
     }
 
+    #[POST('/add')]
     public function addPerson()
     {
         $personRepository = new PersonRepository(ConnectionPDO::connect());
@@ -43,6 +49,7 @@ class PersonController
         }
     }
 
+    #[GET('/delete')]
     public function deletePerson(): void
     {
         $personRepository = new PersonRepository(ConnectionPDO::connect());

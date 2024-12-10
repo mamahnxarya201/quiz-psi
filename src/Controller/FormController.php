@@ -8,16 +8,10 @@ use Model\Repository\PersonRepository;
 use Router\Attributes\GET;
 use Router\Attributes\Prefix;
 
-#[Prefix('/views')]
-class PageController
+#[Prefix('/form')]
+class FormController
 {
-    #[GET('/home')]
-    public function homeController(): void
-    {
-        $personCollection = (new PersonRepository(ConnectionPDO::connect()))->getAll();
-        require 'src/views/home.php';
-    }
-
+    #[GET('/view')]
     public function formViewDataController(): void
     {
         if (is_null($_GET['id'])) {
@@ -31,6 +25,7 @@ class PageController
         require 'src/views/form.php';
     }
 
+    #[GET('/edit')]
     public function formEditDataController(): void
     {
         if (is_null($_GET['id'])) {
@@ -44,6 +39,7 @@ class PageController
         require 'src/views/form.php';
     }
 
+    #[GET('/add')]
     public function formAddDataController(): void
     {
         $titleText = 'Menambah';
