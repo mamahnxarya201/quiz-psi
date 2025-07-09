@@ -16,9 +16,8 @@ class ConnectionPDO
     {
         if (self::$db === null) {
             try {
-                $user = 'root';
-                $pass = 'root';
-                self::$db = PDO::connect('mysql:host=127.0.0.1;dbname=contact_person', $user, $pass);
+                $dbPath = __DIR__ . '/../../database/app.db'; // Adjust the path as needed
+                self::$db = new PDO('sqlite:' . $dbPath);
                 self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch(PDOException $e) {
                 throw new Exception("Error from database connection: " . $e->getMessage());

@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <h1><?= $titleText ?> Data Contact Person</h1>
-        <form id="personForm">
+        <form id="personForm" enctype="multipart/form-data" method="post">
             <fieldset>
                 <legend>Biodata</legend>
                 <div class="form-group">
@@ -50,7 +50,9 @@
                     <label for="foto">Pas Foto:</label>
                     <input class="form-control" type="file" id="foto" name="foto">
                 </div>
-                <img class="img-fluid" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
+                <img id="photoPreview" class="img-fluid"
+                     src="<?= ($person && $person->id) ? '/public/photo.php?id=' . $person->id : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' ?>"
+                     alt="Person Photo" />
                 <input type="hidden" name="id" value="<?= $person ? $person->id : '' ?>">
             </fieldset>
             <div class="row">
@@ -122,4 +124,19 @@
     </script>
 </body>
 
+<script>
+document.getElementById('foto').addEventListener('change', function(event) {
+    const input = event.target;
+    const preview = document.getElementById('photoPreview');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+    }
+});
+</script>
 </html>

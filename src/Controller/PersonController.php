@@ -74,7 +74,12 @@ class PersonController
         $alamat = $_POST['alamat'] ?? '';
         $noTelp = $_POST['no_telp'] ?? '';
         $jenisKelamin = $_POST['jenis_kelamin'] ?? '';
-        $fotoBase64 = $_POST['foto_base64'] ?? null;
+        $fotoBase64 = null;
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $fotoBase64 = base64_encode(file_get_contents($_FILES['foto']['tmp_name']));
+        } else {
+            $fotoBase64 = $_POST['foto_base64'] ?? null;
+        }
 
         if ($jenisKelamin === 'Pria') {
             $jenisKelamin = true;

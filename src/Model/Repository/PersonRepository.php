@@ -29,8 +29,9 @@ class PersonRepository
             }
             return $personCollection;
         } catch (PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
+            throw new Exception('Database error: ' . $e->getMessage());
         }
+        return [];
     }
 
     public function getById(int $id): Person
@@ -43,8 +44,9 @@ class PersonRepository
             ConnectionPDO::disconnect();
             return PersonFactory::createFromArray($person);
         } catch (PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
+            throw new Exception('Database error: ' . $e->getMessage());
         }
+        return PersonFactory::createFromArray([]);
     }
 
     public function addPerson(Person $person): void
@@ -56,15 +58,17 @@ class PersonRepository
             $photoData = base64_decode($person->base64Photo);
         }
 
-        $sql = "INSERT INTO person (`name`, no_telp, alamat, jenis_kelamin, tanggal_lahir, tempat_lahir, photo) VALUES (:name, :no_telp, :alamat, :jenis_kelamin, :tanggal_lahir, :tempat_lahir, :photo)";
+        $sql = "INSERT INTO person (name, no_telp, alamat, jenis_kelamin, tanggal_lahir, tempat_lahir, photo) VALUES (:name, :no_telp, :alamat, :jenis_kelamin, :tanggal_lahir, :tempat_lahir, :photo)";
 
         $stmt =  $this->db->prepare($sql);
 
         $stmt->bindParam(':name', $person->name, PDO::PARAM_STR);
         $stmt->bindParam(':no_telp', $person->noTelp, PDO::PARAM_STR);
         $stmt->bindParam(':alamat', $person->alamat, PDO::PARAM_STR);
-        $stmt->bindParam(':jenis_kelamin', $person->jenisKelamin, PDO::PARAM_BOOL);
-        $stmt->bindParam(':tanggal_lahir', $person->getTanggalLahir(), PDO::PARAM_STR);
+        $jenisKelamin = (int) $person->jenisKelamin;
+        $stmt->bindParam(':jenis_kelamin', $jenisKelamin, PDO::PARAM_INT);
+        $tanggalLahir = $person->getTanggalLahir();
+        $stmt->bindParam(':tanggal_lahir', $tanggalLahir, PDO::PARAM_STR);
         $stmt->bindParam(':tempat_lahir', $person->tempatLahir, PDO::PARAM_STR);
         $stmt->bindParam(':photo', $photoData, PDO::PARAM_LOB);
 
@@ -82,15 +86,17 @@ class PersonRepository
             $photoData = base64_decode($person->base64Photo);
         }
 
-        $sql = "UPDATE person SET `name` = :name, no_telp = :no_telp, alamat = :alamat, jenis_kelamin = :jenis_kelamin, tanggal_lahir = :tanggal_lahir, tempat_lahir = :tempat_lahir, photo = :photo WHERE id = :id";
+        $sql = "UPDATE person SET name = :name, no_telp = :no_telp, alamat = :alamat, jenis_kelamin = :jenis_kelamin, tanggal_lahir = :tanggal_lahir, tempat_lahir = :tempat_lahir, photo = :photo WHERE id = :id";
 
         $stmt =  $this->db->prepare($sql);
         $stmt->bindParam(':id', $person->id, PDO::PARAM_INT);
         $stmt->bindParam(':name', $person->name, PDO::PARAM_STR);
         $stmt->bindParam(':no_telp', $person->noTelp, PDO::PARAM_STR);
         $stmt->bindParam(':alamat', $person->alamat, PDO::PARAM_STR);
-        $stmt->bindParam(':jenis_kelamin', $person->jenisKelamin, PDO::PARAM_BOOL);
-        $stmt->bindParam(':tanggal_lahir', $person->getTanggalLahir(), PDO::PARAM_STR);
+        $jenisKelamin = (int) $person->jenisKelamin;
+        $stmt->bindParam(':jenis_kelamin', $jenisKelamin, PDO::PARAM_INT);
+        $tanggalLahir = $person->getTanggalLahir();
+        $stmt->bindParam(':tanggal_lahir', $tanggalLahir, PDO::PARAM_STR);
         $stmt->bindParam(':tempat_lahir', $person->tempatLahir, PDO::PARAM_STR);
         $stmt->bindParam(':photo', $photoData, PDO::PARAM_LOB);
 
